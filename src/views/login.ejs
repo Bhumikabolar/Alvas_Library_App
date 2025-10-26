@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Library Login</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="login-page">
+    <div class="login-bg"></div>
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-title">
+          <img src="/img/logo.jpeg" alt="AIET" />
+          <h1>ALVAS INSTITUTE OF ENGINEERING AND TECHNOLOGY</h1>
+        </div>
+        <p class="login-sub">Use your USN/Name as first-time password (case-insensitive). You will be asked to set a new password.</p>
+        <% if (error) { %>
+          <p class="login-error"><%= error %></p>
+        <% } %>
+        <form method="post" action="/login" class="login-form">
+          <label>Role</label>
+          <select name="role" id="role">
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="staff">Library Staff</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <div id="studentFields">
+            <label>USN</label>
+            <input type="text" name="usn" placeholder="e.g. 1RV21CS001" />
+          </div>
+
+          <div id="staffFields" style="display:none;">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="e.g. Alice" />
+          </div>
+
+          <div id="adminList" style="display:none; margin-top: 6px;">
+            <label>Select Admin Name</label>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <label style="display:flex; align-items:center; gap:6px; background:#f3f4f6; padding:6px 10px; border-radius:8px;">
+                <input type="checkbox" class="admin-name" value="Bhumika" /> Bhumika
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; background:#f3f4f6; padding:6px 10px; border-radius:8px;">
+                <input type="checkbox" class="admin-name" value="Bindushree" /> Bindushree
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; background:#f3f4f6; padding:6px 10px; border-radius:8px;">
+                <input type="checkbox" class="admin-name" value="Chaithanya" /> Chaithanya
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; background:#f3f4f6; padding:6px 10px; border-radius:8px;">
+                <input type="checkbox" class="admin-name" value="Chandushree" /> Chandushree
+              </label>
+            </div>
+          </div>
+
+          <label>Password</label>
+          <input type="password" name="password" placeholder="First-time: same as USN/Name" />
+
+          <div class="login-actions">
+            <div></div>
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const roleSel = document.getElementById('role');
+      const studentFields = document.getElementById('studentFields');
+      const staffFields = document.getElementById('staffFields');
+      const adminList = document.getElementById('adminList');
+      function updateFields() {
+        if (roleSel.value === 'student') {
+          studentFields.style.display = 'block';
+          staffFields.style.display = 'none';
+          adminList.style.display = 'none';
+        } else {
+          studentFields.style.display = 'none';
+          staffFields.style.display = 'block';
+          adminList.style.display = (roleSel.value === 'admin') ? 'block' : 'none';
+        }
+      }
+      roleSel.addEventListener('change', updateFields);
+      updateFields();
+
+      // Admin name checkboxes behave like radios and fill the Name input
+      const adminBoxes = document.querySelectorAll('.admin-name');
+      const nameInput = document.querySelector('input[name="name"]');
+      adminBoxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+          if (cb.checked) {
+            adminBoxes.forEach(other => { if (other !== cb) other.checked = false; });
+            nameInput.value = cb.value;
+          } else {
+            if ([...adminBoxes].every(b => !b.checked)) nameInput.value = '';
+          }
+        });
+      });
+    </script>
+  </body>
+  </html>
+
+
+
+

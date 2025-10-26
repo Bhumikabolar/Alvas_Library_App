@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Catalog</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">
+        <img src="/img/logo.jpeg" alt="AIET" />
+        <div>Welcome, <strong><%= (user.name || user.usn) %></strong> (<%= user.role %>)</div>
+      </div>
+      <div class="title">ALVAS INSTITUTE OF ENGINEERING AND TECHNOLOGY</div>
+      <div class="actions">
+        <a href="/me">My Account</a>
+        <% if (['admin','staff'].includes(user.role)) { %>
+          <a href="/admin">Admin</a>
+        <% } %>
+        <a href="/password">Change Password</a>
+        <form method="post" action="/logout">
+          <button>Logout</button>
+        </form>
+      </div>
+    </div>
+    <div class="page">
+    <div class="container grid">
+      <% books.forEach(b => { %>
+        <div class="card">
+          <% if (b.cover_url) { %>
+            <img src="<%= b.cover_url %>" alt="<%= b.title %>" style="width:100%; max-height:260px; object-fit:cover; border-radius:6px;" />
+          <% } else { %>
+            <div class="book-photo">📚</div>
+          <% } %>
+          <h3><%= b.title %></h3>
+          <p>Author: <%= b.author %></p>
+          <p>Type: <%= b.type || '-' %></p>
+          <p>Available: <%= b.available_count %> / <%= b.total_count %></p>
+          <p>Currently Booked: <%= b.currently_booked %></p>
+          <p>Rack: <%= b.rack || '-' %>, Position: <%= b.position || '-' %></p>
+          <form method="post" action="/reserve/<%= b.id %>">
+            <button <%= b.available_count <= 0 ? 'disabled' : '' %>>Reserve now</button>
+          </form>
+          <% if (b.soft_copy_url) { %>
+            <p style="margin-top:8px;">
+              <button type="button" onclick="window.open('<%= b.soft_copy_url %>','_blank','noopener');">View soft copy</button>
+            </p>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+    </div>
+  </body>
+  </html>
+
+

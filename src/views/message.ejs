@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= title || 'Message' %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <style>
+      body.message-page {
+        min-height: 100vh;
+        margin: 0;
+        background: url('<%= imageUrl %>') center/cover no-repeat fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .message-card {
+        background: rgba(255,255,255,0.92);
+        border-radius: 12px;
+        padding: 24px 28px;
+        max-width: 560px;
+        width: calc(100% - 32px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        text-align: center;
+      }
+      .message-card h1 { margin: 0 0 8px; font-size: 22px; }
+      .message-card p { margin: 0 0 16px; font-size: 16px; }
+      .message-actions { display:flex; gap:10px; justify-content:center; }
+      .message-actions a, .message-actions button {
+        display: inline-block; padding: 8px 14px; border-radius: 8px;
+        background: #0f62fe; color: #fff; text-decoration: none; border: none; cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="message-page">
+    <div class="message-card">
+      <h1><%= title || 'Notice' %></h1>
+      <p><%= message || '' %></p>
+      <div class="message-actions">
+        <a href="/catalog">Back to Catalog</a>
+        <a href="/me">My Account</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">
+        <img src="/img/logo.jpeg" alt="AIET" />
+        <div><strong><%= (user.name || user.usn) %></strong> — <%= user.role %></div>
+      </div>
+      <div class="title">ALVAS INSTITUTE OF ENGINEERING AND TECHNOLOGY</div>
+      <div class="actions">
+        <a href="/catalog">Catalog</a>
+        <a href="/password">Change Password</a>
+        <form method="post" action="/logout">
+          <button>Logout</button>
+        </form>
+      </div>
+    </div>
+    <div class="container">
+      <h2>Reservations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Book</th>
+            <th>Status</th>
+            <th>Reserved</th>
+            <th>Expires</th>
+            <th>Collected</th>
+            <th>Due</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reservations.forEach(r => { %>
+            <tr>
+              <td><%= r.name || r.usn %></td>
+              <td><%= r.title %></td>
+              <td><%= r.status %></td>
+              <td><%= r.reserved_at ? new Date(r.reserved_at).toLocaleString() : '-' %></td>
+              <td><%= r.expires_at ? new Date(r.expires_at).toLocaleString() : '-' %></td>
+              <td><%= r.collected_at ? new Date(r.collected_at).toLocaleString() : '-' %></td>
+              <td><%= r.due_at ? new Date(r.due_at).toLocaleDateString() : '-' %></td>
+              <td>
+                <% if (r.status === 'reserved') { %>
+                  <a class="btn" href="/admin/reservations/<%= r.id %>/collect">Mark Collected</a>
+                <% } %>
+                <% if (['reserved','collected'].includes(r.status)) { %>
+                  <a class="btn btn-danger" href="/admin/reservations/<%= r.id %>/cancel">Cancel</a>
+                <% } %>
+                <% if (r.status === 'collected') { %>
+                  <a class="btn" href="/admin/reservations/<%= r.id %>/return">Mark Returned</a>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <h2>Books</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Total Count</th>
+            <th>Cover URL</th>
+            <th>Soft Copy URL</th>
+            <th>Rack</th>
+            <th>Position</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% books.forEach(b => { %>
+            <tr>
+              <td><%= b.title %></td>
+              <td><%= b.author %></td>
+              <td><%= b.total_count %></td>
+              <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis;">
+                <form method="post" action="/admin/books/update">
+                  <input type="hidden" name="bookId" value="<%= b.id %>" />
+                  <input type="number" name="total_count" min="0" value="<%= b.total_count %>" />
+                  <input type="url" name="cover_url" value="<%= b.cover_url || '' %>" placeholder="https://..." />
+              </td>
+              <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis;">
+                  <input type="url" name="soft_copy_url" value="<%= b.soft_copy_url || '' %>" placeholder="https://..." />
+              </td>
+              <td>
+                  <input type="text" name="rack" value="<%= b.rack || '' %>" placeholder="Rack" style="width:80px;" />
+              </td>
+              <td>
+                  <input type="text" name="position" value="<%= b.position || '' %>" placeholder="Pos" style="width:80px;" />
+              </td>
+              <td>
+                  <button>Save</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  </html>
+
+

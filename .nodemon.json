@@ -1,0 +1,15 @@
+{
+  "ignore": [
+    "src/db/library.sqlite",
+    "src/db/library.sqlite-journal"
+  ],
+  "ext": "js,json,ejs,css"
+}
+
+
+
+
+
+
+
+

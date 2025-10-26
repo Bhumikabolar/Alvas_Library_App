@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Account</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="brand">
+        <div><strong><%= (user.name || user.usn) %></strong> — <%= user.role %></div>
+      </div>
+      <div class="title">ALVAS INSTITUTE OF ENGINEERING AND TECHNOLOGY</div>
+      <div class="actions">
+        <a href="/catalog">Catalog</a>
+        <a href="/password">Change Password</a>
+        <form method="post" action="/logout">
+          <button>Logout</button>
+        </form>
+      </div>
+    </div>
+    <div class="container">
+      <h2>My Reservations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Status</th>
+            <th>Reserved</th>
+            <th>Expires</th>
+            <th>Collected</th>
+            <th>Due</th>
+            <th>Fine</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reservations.forEach(r => { %>
+            <tr>
+              <td><%= r.title %> — <%= r.author %></td>
+              <td><%= r.status %></td>
+              <td><%= r.reserved_at ? new Date(r.reserved_at).toLocaleString() : '-' %></td>
+              <td><%= r.expires_at ? new Date(r.expires_at).toLocaleString() : '-' %></td>
+              <td><%= r.collected_at ? new Date(r.collected_at).toLocaleString() : '-' %></td>
+              <td><%= r.due_at ? new Date(r.due_at).toLocaleDateString() : '-' %></td>
+              <td><%= r.fine %></td>
+              <td>
+                <% if (r.status === 'reserved') { %>
+                  <form method="post" action="/cancel/<%= r.id %>" style="display:inline;">
+                    <button>Cancel</button>
+                  </form>
+                <% } else if (r.status === 'collected') { %>
+                  <% if (r.due_at && new Date() > new Date(r.due_at)) { %>
+                    <span style="display:inline-block; padding:6px 10px; background:#fef3c7; color:#92400e; border-radius:8px;">Due</span>
+                  <% } else { %>
+                    <span style="display:inline-block; padding:6px 10px; background:#dbeafe; color:#1e40af; border-radius:8px;">Collected</span>
+                  <% } %>
+                <% } else if (r.status === 'returned') { %>
+                  <span style="display:inline-block; padding:6px 10px; background:#dcfce7; color:#166534; border-radius:8px;">Returned</span>
+                <% } else { %>
+                  <span style="color:#6b7280;">-</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  </html>
+
+
